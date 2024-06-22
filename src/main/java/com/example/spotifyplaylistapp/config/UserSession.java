@@ -11,6 +11,15 @@ public class UserSession {
 
     private String username;
 
+    public boolean isLoggedIn() {
+        return id != 0;
+    }
+
+    public void login(long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     public long getId() {
         return id;
     }
@@ -27,7 +36,5 @@ public class UserSession {
         this.username = username;
     }
 
-    public boolean isLoggedIn() {
-        return id != 0;
-    }
+
 }

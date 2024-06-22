@@ -58,7 +58,8 @@ public class UserService {
         }
 
         User user = byUsername.get();
-        userRepository.save(user);
+        userSession.login(user.getId(), user.getUsername());
+
         return true;
     }
 }

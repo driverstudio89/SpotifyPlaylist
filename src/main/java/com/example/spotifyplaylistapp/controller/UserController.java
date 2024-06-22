@@ -1,5 +1,6 @@
 package com.example.spotifyplaylistapp.controller;
 
+import com.example.spotifyplaylistapp.config.UserSession;
 import com.example.spotifyplaylistapp.model.dto.UserLoginDto;
 import com.example.spotifyplaylistapp.model.dto.UserRegisterDto;
 import com.example.spotifyplaylistapp.service.UserService;
@@ -15,9 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     private final UserService userService;
+    private final UserSession userSession;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserSession userSession) {
         this.userService = userService;
+        this.userSession = userSession;
     }
 
     @ModelAttribute("registerData")
@@ -32,6 +35,9 @@ public class UserController {
 
     @GetMapping("/users/register")
     public String viewRegister() {
+        if (userSession.isLoggedIn()) {
+            return "redirect:/home";
+        }
         return "register";
     }
 
@@ -40,6 +46,9 @@ public class UserController {
             @Valid UserRegisterDto userRegisterDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        if (userSession.isLoggedIn()) {
+            return "redirect:/home";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("registerData", userRegisterDto);
@@ -63,6 +72,9 @@ public class UserController {
 
     @GetMapping("/users/login")
     public String viewLogin() {
+        if (userSession.isLoggedIn()) {
+            return "redirect:/home";
+        }
         return "login";
     }
 
@@ -71,6 +83,10 @@ public class UserController {
             @Valid UserLoginDto userLoginDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+
+        if (userSession.isLoggedIn()) {
+            return "redirect:/home";
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("loginData", userLoginDto);
