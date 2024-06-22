@@ -15,13 +15,13 @@ public class SongInfoDto {
     private String title;
 
     @NotNull
-    private String duration;
+    private Integer duration;
 
     public SongInfoDto(Song song) {
         this.id = song.getId();
         this.performer = song.getPerformer();
         this.title = song.getTitle();
-        this.duration = song.getDuration().toString();
+        this.duration = song.getDuration();
 
     }
 
@@ -50,11 +50,17 @@ public class SongInfoDto {
         this.title = title;
     }
 
-    public @NotNull String getDuration() {
-        return duration;
+    public void setDuration(@NotNull Integer duration) {
+        this.duration = duration;
     }
 
-    public void setDuration(@NotNull String duration) {
-        this.duration = duration;
+
+    public String getDuration() {
+        int minutes = duration / 60;
+        int seconds = duration % 60;
+
+        String result =  String.format("%d:%02d", minutes, seconds) ;
+            System.out.println(result);
+            return result;
     }
 }
