@@ -1,5 +1,6 @@
 package com.example.spotifyplaylistapp.service;
 
+import com.example.spotifyplaylistapp.config.Config;
 import com.example.spotifyplaylistapp.config.UserSession;
 import com.example.spotifyplaylistapp.model.Song;
 import com.example.spotifyplaylistapp.model.User;
@@ -22,11 +23,13 @@ public class UserService {
     private final UserSession userSession;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Config config;
 
-    public UserService(UserSession userSession, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserSession userSession, UserRepository userRepository, PasswordEncoder passwordEncoder, Config config) {
         this.userSession = userSession;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.config = config;
     }
 
     public boolean register(UserRegisterDto userRegisterDto) {
@@ -77,5 +80,23 @@ public class UserService {
         User user = userRepository.findById(userSession.getId()).get();
         user.getPlaylist().clear();
         userRepository.save(user);
+    }
+
+    public String totalPlaylistDuration() {
+        Integer totalDuration = 0;
+        List<Song> list = userRepository.findById(userSession.getId()).get().getPlaylist().stream().toList();
+        for (Song song : list) {
+            totalDuration += song.getDuration();
+        }
+        return toMinutes(totalDuration);
+    }
+
+    public String toMinutes(Integer seconds) {
+        int min = seconds / 60;
+        int sec = seconds % 60;
+
+        String result =  String.format("%d:%02d", min, sec) ;
+        System.out.println(result);
+        return result;
     }
 }

@@ -1,9 +1,12 @@
 package com.example.spotifyplaylistapp.model.dto;
 
+import com.example.spotifyplaylistapp.config.Config;
 import com.example.spotifyplaylistapp.model.Song;
 import jakarta.validation.constraints.NotNull;
 
 public class SongInfoDto {
+
+    private Config config;
 
     @NotNull
     private long id;
@@ -50,17 +53,22 @@ public class SongInfoDto {
         this.title = title;
     }
 
+    public @NotNull String getDuration() {
+        return toMinutes(duration);
+    }
+
     public void setDuration(@NotNull Integer duration) {
         this.duration = duration;
     }
 
+    public String toMinutes(Integer seconds) {
+        int min = seconds / 60;
+        int sec = seconds % 60;
 
-    public String getDuration() {
-        int minutes = duration / 60;
-        int seconds = duration % 60;
-
-        String result =  String.format("%d:%02d", minutes, seconds) ;
-            System.out.println(result);
-            return result;
+        String result =  String.format("%d:%02d", min, sec) ;
+        System.out.println(result);
+        return result;
     }
+
+
 }

@@ -48,11 +48,15 @@ public class HomeController {
 
         List<SongInfoDto> currentUserPlaylist = userService.currentUserPlaylist();
 
+        String totalPlaylistDuration = userService.totalPlaylistDuration();
+
         model.addAttribute("popData", pop);
         model.addAttribute("rockData", rock);
         model.addAttribute("jazzData", jazz);
 
         model.addAttribute("currentUserPlaylist", currentUserPlaylist);
+
+        model.addAttribute("totalPlaylistDuration", totalPlaylistDuration);
 
         return "home";
     }
