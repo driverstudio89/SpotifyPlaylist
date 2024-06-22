@@ -2,6 +2,7 @@ package com.example.spotifyplaylistapp.service;
 
 import com.example.spotifyplaylistapp.config.UserSession;
 import com.example.spotifyplaylistapp.model.User;
+import com.example.spotifyplaylistapp.model.dto.UserLoginDto;
 import com.example.spotifyplaylistapp.model.dto.UserRegisterDto;
 import com.example.spotifyplaylistapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,5 +43,22 @@ public class UserService {
     }
 
 
+    public boolean login(UserLoginDto userLoginDto) {
+        if (userSession.isLoggedIn()) {
+            return false;
+        }
 
+        Optional<User> byUsername = userRepository.findByUsername(userLoginDto.getUsername());
+        if (byUsername.isEmpty()) {
+            return false;
+        }
+
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), byUsername.get().getPassword())) {
+            return false;
+        }
+
+        User user = byUsername.get();
+        userRepository.save(user);
+        return true;
+    }
 }

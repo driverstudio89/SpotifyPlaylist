@@ -1,5 +1,6 @@
 package com.example.spotifyplaylistapp.controller;
 
+import com.example.spotifyplaylistapp.model.dto.UserLoginDto;
 import com.example.spotifyplaylistapp.model.dto.UserRegisterDto;
 import com.example.spotifyplaylistapp.service.UserService;
 import jakarta.validation.Valid;
@@ -22,6 +23,11 @@ public class UserController {
     @ModelAttribute("registerData")
     public UserRegisterDto userRegisterDto() {
         return new UserRegisterDto();
+    }
+
+    @ModelAttribute("loginData")
+    public UserLoginDto userLoginDto() {
+        return new UserLoginDto();
     }
 
     @GetMapping("/users/register")
@@ -52,9 +58,35 @@ public class UserController {
             redirectAttributes.addFlashAttribute("alreadyInUse", true);
             return "redirect:/users/register";
         }
-
-
         return "redirect:/login";
     }
+
+    @GetMapping("/users/login")
+    public String viewLogin() {
+        return "login";
+    }
+
+    @PostMapping("/users/login")
+    public String doLogin(
+            @Valid UserLoginDto userLoginDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("loginData", userLoginDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginData", bindingResult);
+            return "redirect:/users/login";
+        }
+
+        if (!userService.login(userLoginDto)) {
+            redirectAttributes.addFlashAttribute("loginData", userLoginDto);
+            redirectAttributes.addFlashAttribute("wrongCredentials", true);
+            return "redirect:/users/login";
+        }
+
+        return "redirect:/home";
+    }
+
+
 
 }
