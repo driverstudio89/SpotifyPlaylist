@@ -11,28 +11,34 @@
 
                 <h3 class="mySticky bg-gray text-dark  mb-0 mt-2">Pop</h3>
                 <div class="bg-dark rounded " style="height: 20vh; overflow: auto">
-                    <div class="mt-1 rounded badge-info">
+                    <div th:each="song : ${popData}" class="mt-1 rounded badge-info">
                         <img class="mr-1" src="/img/pop.png" alt="Pop" width="30px" height="30px">
-                        <span>{performer} - {title} ({duration} min)</span>
-                        <a class="ml-3 text-danger" href="/">Add</a>
+                        <span><span th:text="${song.getPerformer()}"></span> -
+                            <span th:text="${song.getTitle()}"></span>
+                            (<span th:text="${song.getDuration()}"></span> min)</span>
+                        <a class="ml-3 text-danger" th:href="@{/songs/add/{id}(id = ${song.getId()})}">Add</a>
                     </div>
                 </div>
 
                 <h3 class="mySticky bg-gray text-dark  mb-0 mt-2">Rock</h3>
                 <div class="bg-dark rounded m-auto" style="height: 20vh; overflow: auto">
-                    <div class="mt-1 rounded badge-warning">
+                    <div th:each="song : ${rockData}" class="mt-1 rounded badge-warning">
                         <img class="mr-1" src="/img/rock.png" alt="Rock" width="30px" height="30px">
-                        <span>{performer} - {title} ({duration} min)</span>
-                        <a class="ml-3 text-danger" href="/">Add</a>
+                        <span><span th:text="${song.getPerformer()}"></span> -
+                            <span th:text="${song.getTitle()}"></span>
+                            (<span th:text="${song.getDuration()}"></span> min)</span>
+                        <a class="ml-3 text-danger" th:href="@{/songs/add/{id}(id = ${song.getId()})}">Add</a>
                     </div>
                 </div>
 
                 <h3 class="mySticky bg-gray text-dark  mb-0 mt-2">Jazz</h3>
                 <div class="bg-dark rounded m-auto" style="height: 20vh; overflow: auto">
-                    <div class="mt-3 rounded badge-success">
+                    <div th:each="song : ${jazzData}" class="mt-3 rounded badge-success">
                         <img class="mr-1" src="/img/jazz.png" alt="Jazz" width="30px" height="30px">
-                        <span>{performer} - {title} ({duration} min)</span>
-                        <a class="ml-3 text-danger" href="/">Add</a>
+                        <span><span th:text="${song.getPerformer()}"></span> -
+                            <span th:text="${song.getTitle()}"></span>
+                            (<span th:text="${song.getDuration()}"></span> min)</span>
+                        <a class="ml-3 text-danger" th:href="@{/songs/add/{id}(id = ${song.getId()})}">Add</a>
                     </div>
                 </div>
             </div>
@@ -44,16 +50,18 @@
 
                 <div class="bg-dark rounded m-auto" style="height: 68.5vh; overflow: auto">
                     <table class="table table-striped table-dark">
-                        <tr>
+                        <tr th:each="song : ${currentUserPlaylist}">
                             <th scope="row"><img class="mr-2 " src="/img/playlist.png" alt="Playlist" width="30px" height="30px"></th>
                             <td>
-                                <span>{performer} - {title} ({duration} min)</span>
+                                <span><span th:text="${song.getPerformer()}"></span> -
+                                    <span th:text="${song.getTitle()}"></span>
+                                    (<span th:text="${song.getDuration()}"></span> min)</span>
                             </td>
                         </tr>
                     </table>
                 </div>
 
-                <a href="/" class="mt-1 mb-0 btn btn-danger">Remove all</a>
+                <a href="/" class="mt-1 mb-0 btn btn-danger" th:href="@{/songs/remove-all}">Remove all</a>
             
             </div>
         </div>

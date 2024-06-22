@@ -1,14 +1,19 @@
 package com.example.spotifyplaylistapp.service;
 
 import com.example.spotifyplaylistapp.config.UserSession;
+import com.example.spotifyplaylistapp.model.Song;
 import com.example.spotifyplaylistapp.model.User;
+import com.example.spotifyplaylistapp.model.dto.SongInfoDto;
 import com.example.spotifyplaylistapp.model.dto.UserLoginDto;
 import com.example.spotifyplaylistapp.model.dto.UserRegisterDto;
 import com.example.spotifyplaylistapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -61,5 +66,16 @@ public class UserService {
         userSession.login(user.getId(), user.getUsername());
 
         return true;
+    }
+
+    public List<SongInfoDto> currentUserPlaylist() {
+        return userRepository.findById(userSession.getId()).get().getPlaylist().stream().map(SongInfoDto::new).toList();
+    }
+
+    @Transactional
+    public void removeAllSongs() {
+        User user = userRepository.findById(userSession.getId()).get();
+        user.getPlaylist().clear();
+        userRepository.save(user);
     }
 }

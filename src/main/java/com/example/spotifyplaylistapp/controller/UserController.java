@@ -67,7 +67,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("alreadyInUse", true);
             return "redirect:/users/register";
         }
-        return "redirect:/login";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/users/login")
@@ -102,6 +102,8 @@ public class UserController {
 
         return "redirect:/home";
     }
+
+
 
 
 
